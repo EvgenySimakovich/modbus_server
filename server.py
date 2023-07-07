@@ -29,7 +29,7 @@ def main():
                                                      word_list=[val for i in range(50000)])
             print(datetime.now())
 
-            if val == 100:
+            if val == 1000:
                 val = 0
             val += 1
 
