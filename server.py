@@ -23,11 +23,9 @@ def main():
 
         val = 1
         while True:
-            print(datetime.now())
             for server in servers:
                 server.data_bank.set_input_registers(address=0,
                                                      word_list=[val for i in range(50000)])
-            print(datetime.now())
 
             if val == 1000:
                 val = 0
