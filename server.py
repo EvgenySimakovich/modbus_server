@@ -8,7 +8,7 @@ load_dotenv()
 
 IP_ADDRESS = os.getenv('IP_ADDRESS')
 # create an instance of Modbus Server
-servers = [ModbusServer(IP_ADDRESS, i, no_block=True) for i in range(10503, 10505)]
+servers = [ModbusServer(IP_ADDRESS, i, no_block=True) for i in range(10503, 10604)]
 
 
 def main():
@@ -25,9 +25,9 @@ def main():
         while True:
             for server in servers:
                 server.data_bank.set_input_registers(address=0,
-                                                     word_list=[val for i in range(50000)])
+                                                     word_list=[val for i in range(100)])
 
-            if val == 1000:
+            if val == 100:
                 val = 0
             val += 1
 
