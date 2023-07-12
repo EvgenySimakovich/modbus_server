@@ -8,7 +8,7 @@ load_dotenv()
 
 IP_ADDRESS = os.getenv('IP_ADDRESS')
 # create an instance of Modbus Server
-servers = [ModbusServer(IP_ADDRESS, i, no_block=True) for i in range(10503, 10604)]
+servers = [ModbusServer(IP_ADDRESS, i, no_block=True) for i in range(10503, 10524)]
 
 
 def main():
