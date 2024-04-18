@@ -8,20 +8,13 @@ from time import sleep
 def get_local_ip() -> str:
     hostname = socket.gethostname()
     local_ip = socket.gethostbyname(hostname)
-    host_info = socket.gethostbyname_ex(hostname)
-    (host_name,
-     list_of_aliases,
-     list_of_IP_addresses) = host_info
-    if len(list_of_IP_addresses) > 1:
-        remote_ip = list_of_IP_addresses[1]
-        return remote_ip
-    else:
-        return local_ip
+    return local_ip
 
 
-def create_servers(count_of_servers) -> list[ModbusServer]:
+def create_servers(count_of_servers: int = 1, ip_address: str = None) -> list[ModbusServer]:
     # create an instances of Modbus Server
-    ip_address = get_local_ip()
+    if not ip_address:
+        ip_address = get_local_ip()
 
     list_of_servers = [ModbusServer(
         host=ip_address,
@@ -33,8 +26,10 @@ def create_servers(count_of_servers) -> list[ModbusServer]:
 
 @click.command()
 @click.option("--count", default=1, help="Number of Slaves")
-def main(count):
-    servers = create_servers(count_of_servers=count)
+@click.option("--ip_address", default="127.0.0.1", help="IP Address")
+def main(count, ip_address):
+    servers = create_servers(count_of_servers=count,
+                             ip_address=ip_address)
     print(servers)
     try:
         print('Start servers...')
