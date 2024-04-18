@@ -29,9 +29,9 @@ def main():
         while True:
             for server in servers:
                 server.data_bank.set_input_registers(address=0,
-                                                     word_list=[val for _ in range(1000)])
+                                                     word_list=[val for _ in range(500)])
                 server.data_bank.set_holding_registers(address=0,
-                                                       word_list=[val for _ in range(1000)])
+                                                       word_list=[val for _ in range(500)])
 
             print(f'Set value {val} to INPUT and HOLDING registers')
             if val == 100:
