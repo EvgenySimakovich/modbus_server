@@ -1,12 +1,8 @@
 import socket
 
+import click
 from pyModbusTCP.server import ModbusServer
 from time import sleep
-
-from config import QUANT
-
-
-server_quantity = QUANT
 
 
 def get_local_ip() -> str:
@@ -23,20 +19,23 @@ def get_local_ip() -> str:
         return local_ip
 
 
+def create_servers(count_of_servers) -> list[ModbusServer]:
+    # create an instances of Modbus Server
+    ip_address = get_local_ip()
 
-# create an instances of Modbus Server
-# server_quantity = int(input('Введите кол-во серверов (N). Сервера будут запущены на портах 10503 и далее: '))
-ip_address = get_local_ip()
-print(ip_address)
+    list_of_servers = [ModbusServer(
+        host=ip_address,
+        port=i,
+        no_block=True) for i in range(10503, 10503 + count_of_servers)]
 
-servers = [ModbusServer(
-            host=ip_address,
-            port=i,
-            no_block=True) for i in range(10503, 10503 + server_quantity)]
+    return list_of_servers
 
 
-def main():
-
+@click.command()
+@click.option("--count", default=1, help="Number of Slaves")
+def main(count):
+    servers = create_servers(count_of_servers=count)
+    print(servers)
     try:
         print('Start servers...')
         for server in servers:
