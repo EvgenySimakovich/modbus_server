@@ -1,25 +1,29 @@
 from pyModbusTCP.server import ModbusServer
 from time import sleep
 from dotenv import load_dotenv
-from datetime import datetime
 import os
 
 load_dotenv()
 
 IP_ADDRESS = os.getenv('IP_ADDRESS')
-# create an instance of Modbus Server
-servers = [ModbusServer(IP_ADDRESS, i, no_block=True) for i in range(10503, 10504)]
+
+# create an instances of Modbus Server
+server_quantity = int(input('Введите кол-во серверов (N). Сервера будут запущены на портах 10503 и далее: '))
+servers = [ModbusServer(
+            host=IP_ADDRESS,
+            port=i,
+            no_block=True) for i in range(10503, 10503 + server_quantity)]
 
 
 def main():
 
     try:
-        print('Start server...')
+        print('Start servers...')
         for server in servers:
-            print(f'Server ({server.port}) started')
             server.start()
-
-        print('Modbus server is online')
+            if server.is_run:
+                print(f'Server started. Port: {server.port}. Data blank: {server.data_bank}')
+        print('Modbus servers are online')
 
         val = 1
         while True:
@@ -29,14 +33,16 @@ def main():
                 server.data_bank.set_holding_registers(address=0,
                                                        word_list=[val for _ in range(1000)])
 
+            print(f'Set value {val} to INPUT and HOLDING registers')
             if val == 100:
                 val = 0
             val += 1
 
             sleep(1)
 
-    except:
+    except Exception as ex:
         print('Shutdown server...')
+        print(ex)
         for server in servers:
             print(f'Server ({server.port}) stopped')
             server.stop()
@@ -45,4 +51,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
