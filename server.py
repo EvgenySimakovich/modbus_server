@@ -8,7 +8,8 @@ load_dotenv()
 IP_ADDRESS = os.getenv('IP_ADDRESS')
 
 # create an instances of Modbus Server
-server_quantity = int(input('Введите кол-во серверов (N). Сервера будут запущены на портах 10503 и далее: '))
+# server_quantity = int(input('Введите кол-во серверов (N). Сервера будут запущены на портах 10503 и далее: '))
+server_quantity = os.getenv('QUANT')
 servers = [ModbusServer(
             host=IP_ADDRESS,
             port=i,
