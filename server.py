@@ -1,16 +1,36 @@
+import socket
+
 from pyModbusTCP.server import ModbusServer
 from time import sleep
 
-from config import IP_ADDRESS, QUANT
+from config import QUANT
 
-IP_ADDRESS = IP_ADDRESS
+
 server_quantity = QUANT
+
+
+def get_local_ip() -> str:
+    hostname = socket.gethostname()
+    local_ip = socket.gethostbyname(hostname)
+    host_info = socket.gethostbyname_ex(hostname)
+    (host_name,
+     list_of_aliases,
+     list_of_IP_addresses) = host_info
+    if len(list_of_IP_addresses) > 1:
+        remote_ip = list_of_IP_addresses[1]
+        return remote_ip
+    else:
+        return local_ip
+
+
 
 # create an instances of Modbus Server
 # server_quantity = int(input('Введите кол-во серверов (N). Сервера будут запущены на портах 10503 и далее: '))
+ip_address = get_local_ip()
+print(ip_address)
 
 servers = [ModbusServer(
-            host=IP_ADDRESS,
+            host=ip_address,
             port=i,
             no_block=True) for i in range(10503, 10503 + server_quantity)]
 
